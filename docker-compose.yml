@@ -1,0 +1,50 @@
+services:
+  service-dev:
+    container_name: service-dev
+    restart: unless-stopped
+    env_file: .env
+    build:
+      target: development
+      context: .
+    ports:
+      - ${PORT}:3000
+      - 9229:9229
+    volumes:
+      - .:/app
+    networks:
+      - service_network
+    command: sleep infinity
+    depends_on:
+      - postgresql
+      - redis
+  postgresql:
+    image: postgres:16
+    container_name: postgresql
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - 5432:5432
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+    networks:
+      - service_network
+  redis:
+    image: redis
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - 6379
+    volumes:
+      - redis_data:/data
+    networks:
+      - service_network
+volumes:
+  postgresql_data:
+  redis_data:
+
+networks:
+  service_network:
+      driver: bridge

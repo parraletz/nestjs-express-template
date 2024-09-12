@@ -1,0 +1,20 @@
+{
+  "name": "Nestjs Fastify Template",
+  // "build": {
+  //   "dockerfile": "../Dockerfile",
+  //   "context": "..",
+  //   "target": "development"
+  // },
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "service-dev",
+  "workspaceFolder": "/app",
+  "remoteUser": "node",
+  "mounts": [
+    "source=${localEnv:HOME}/.gitconfig,target=/home/vscode/.gitconfig,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
+  ],
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+  "postCreateCommand": "npm install &&  git config --global --add safe.directory /app"
+}
